@@ -1,129 +1,57 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+import random
+from art import logo, vs
+from game_data import data 
+from replit import clear 
 
-# C extensions
-*.so
+# Format account data into printable format 
+def format_data(account): 
+  """Takes the account data and returns the printable format."""
+  account_name = account['name']
+  account_descr = account['description']
+  account_country = account['country']
+  return f"{account_name}, a {account_descr}, from {account_country}"
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+def check_answer(guess, a_followers, b_followers): 
+  """Take the user guess and follower counts and returns if they got it right."""
+  if a_followers > b_followers: 
+    return guess == 'a'
+  else: 
+    return guess == 'b'
+  
+# Display art
+print(logo)
+score = 0 
+game_should_continue = True 
+account_b = random.choice(data)
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+while game_should_continue: 
+# Generate random accounts from game data. 
+  account_a = account_b 
+  account_b = random.choice(data)
+  
+  if account_a == account_b: 
+    account_b = random.choice(data)
+  
+  print(f"Compare A: {format_data(account_a)}")
+  print(vs)
+  print(f"Against B: {format_data(account_b)}")
+  
+  # Ask user for a guess
+  guess = input("Who has more followers? Type 'A' or 'B': ").lower()
+  
+  # Check if user is correct 
+  ## Get follower count of each account 
+  a_follower_count = account_a["follower_count"]
+  b_follower_count = account_b["follower_count"]
+  is_correct = check_answer(guess, a_follower_count, b_follower_count)
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-.python-version
-
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
+  clear() 
+  print(logo)
+  # Give user feedback on their guess 
+  if is_correct: 
+    score += 1
+    print(f"You're right! Current score: {score}.")
+  else: 
+    game_should_continue = False
+    print(f"Sorry, that's wrong. Final score: {score}")
